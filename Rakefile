@@ -26,6 +26,8 @@ task :install => [:submodule_init, :submodules] do
     Rake::Task["install_vundle"].execute
   end
 
+  prepare_neovim_dependencies
+
   Rake::Task["install_prezto"].execute
 
   install_fonts
@@ -265,20 +267,6 @@ def iTerm_profile_list
   profiles
 end
 
-def ask(message, values)
-  puts message
-  while true
-    values.each_with_index { |val, idx| puts " #{idx+1}. #{val}" }
-    selection = STDIN.gets.chomp
-    if (Float(selection)==nil rescue true) || selection.to_i < 0 || selection.to_i > values.size+1
-      puts "ERROR: Invalid selection.\n\n"
-    else
-      break
-    end
-  end
-  selection = selection.to_i-1
-  values[selection]
-end
 
 def install_prezto
   puts
@@ -316,7 +304,29 @@ def install_prezto
   end
 end
 
-def want_to_install? (section)
+def prepare_neovim_dependencies
+  run %{ pip3 install --user pynvim }
+
+  Vundle::update_vundle
+end
+
+def ask(message, values)
+  puts message
+  while true
+    values.each_with_index { |val, idx| puts " #{idx+1}. #{val}" }
+    selection = STDIN.gets.chomp
+    if (Float(selection)==nil rescue true) || selection.to_i < 0 || selection.to_i > values.size+1
+      puts "ERROR: Invalid selection.\n\n"
+    else
+      break
+    end
+  end
+  selection = selection.to_i-1
+  values[selection]
+end
+
+
+def want_to_install?(section)
   if ENV["ASK"]=="true"
     puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
     STDIN.gets.chomp == 'y'
@@ -355,7 +365,6 @@ def needs_migration_to_vundle?
   File.exists? File.join('vim', 'bundle', 'tpope-vim-pathogen')
 end
 
-
 def list_vim_submodules
   result=`git submodule -q foreach 'echo $name"||"\`git remote -v | awk "END{print \\\\\$2}"\`'`.select{ |line| line =~ /^vim.bundle/ }.map{ |line| line.split('||') }
   Hash[*result.flatten]
@@ -381,4 +390,7 @@ def success_msg(action)
   (_______\_____|\____|_|
   }
   puts "YADR has been #{action}. Please restart your terminal and vim."
+
+  puts "run :UpdateRemotePlugins in nvim"
+  puts "run this and set it on github: pbcopy < ~/.ssh/id_rsa.pub"
 end
