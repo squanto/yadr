@@ -10,6 +10,7 @@ task :install => [:submodule_init, :submodules] do
   puts "======================================================"
   puts
 
+  install_xcode_command_line_tools if RUBY_PLATFORM.downcase.include?("darwin")
   install_homebrew if RUBY_PLATFORM.downcase.include?("darwin")
   install_rvm_binstubs
 
@@ -148,6 +149,16 @@ def install_rvm_binstubs
   puts "will automatically use those bins after cd'ing into dir."
   puts "======================================================"
   run %{ chmod +x $rvm_path/hooks/after_cd_bundler }
+  puts
+end
+
+def install_xcode_command_line_tools
+  puts
+  puts
+  puts "======================================================"
+  puts "Installing XCode Command Line Tools"
+  puts "======================================================"
+  run %{xcode-select --install}
   puts
 end
 
