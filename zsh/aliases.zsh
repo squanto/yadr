@@ -65,11 +65,8 @@ alias ve='vim ~/.vimrc'
 alias ze='vim ~/.zshrc'
 
 # Git Aliases
-alias gs='git status'
 alias gstsh='git stash'
-alias gst='git stash'
-alias gsp='git stash pop'
-alias gsa='git stash apply'
+alias gst='git status'
 alias gsh='git show'
 alias gshw='git show'
 alias gshow='git show'
