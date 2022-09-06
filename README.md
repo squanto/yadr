@@ -64,9 +64,6 @@ Recommended Cmd-Escape, which is really Cmd-Capslock.
 #### In iTerm, uncheck "Native full screen windows" on General
 This will give you fast full screen windows that are switchable without switching to spaces.
 
-#### in MacVim, uncheck "Prefer native full-screen support" under Advanced settings
-Same as iTerm. The native spaces navigation slows everything down for no reason.
-
 ## If you want to run vim in terminal
 
 * Make sure you install Solarized colorscheme in your terminal!
@@ -98,8 +95,7 @@ Read on to learn what YADR provides!
 
 Homebrew is _the missing package manager for macOS_. Installed automatically.
 
-We automatically install a few useful packages including ctags, git, macvim, hub, and the silver searcher ('ag')
-Note that our autocomplete plugin requires a MacVim that supports Lua. The installer knows how to install it, but if you had one installed before, you may need to manually remove your old MacVim.
+We automatically install a few useful packages including ctags, git, hub, and the silver searcher ('ag')
 
 ### ZSH
 
@@ -313,14 +309,6 @@ These hacks are Lion-centric. May not work for other OS'es. My favorite mods inc
   * Ultra fast key repeat rate (now you can scroll super quick using j/k)
   * No disk image verification (downloaded files open quicker)
   * Display the ~/Library folder in finder (hidden in Lion)
-
-### Macvim troubles with Lua?
-```
-brew uninstall macvim
-brew remove macvim
-brew cleanup
-brew install macvim --custom-icons --with-override-system-vim --with-lua --with-luajit
-```
 
 ### Terminal Vim troubles with Lua?
 Installing terminal vim (with lua) with an RVM managed Ruby can cause the neocomplete plugin to segfault. Try uninstalling vim, then installing with system ruby:
