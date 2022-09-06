@@ -10,8 +10,8 @@ task :install => [:submodule_init, :submodules] do
   puts "======================================================"
   puts
 
-  install_xcode_command_line_tools if RUBY_PLATFORM.downcase.include?("darwin")
-  install_homebrew if RUBY_PLATFORM.downcase.include?("darwin")
+  install_xcode_command_line_tools if on_a_mac?
+  setup_homebrew if on_a_mac?
   install_rvm_binstubs
 
   # this has all the runcoms from this directory.
@@ -30,7 +30,7 @@ task :install => [:submodule_init, :submodules] do
 
   install_fonts
 
-  install_term_theme if RUBY_PLATFORM.downcase.include?("darwin")
+  install_term_theme if on_a_mac?
 
   run_bundle_config
 
@@ -114,15 +114,19 @@ end
 
 task :default => 'install'
 
-
 private
+
+def on_a_mac?
+  RUBY_PLATFORM.downcase.include?("darwin")
+end
+
 def run(cmd)
   puts "[Running] #{cmd}"
   `#{cmd}` unless ENV['DEBUG']
 end
 
 def number_of_cores
-  if RUBY_PLATFORM.downcase.include?("darwin")
+  if on_a_mac?
     cores = run %{ sysctl -n hw.ncpu }
   else
     cores = run %{ nproc }
@@ -162,28 +166,39 @@ def install_xcode_command_line_tools
   puts
 end
 
-def install_homebrew
+def setup_homebrew
   run %{which brew}
   unless $?.success?
-    puts "======================================================"
-    puts "Installing Homebrew, the OSX package manager...If it's"
-    puts "already installed, this will do nothing."
-    puts "======================================================"
-    run %{bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"}
+    install_homebrew
   end
+  update_homebrew_registry
+  install_homebrew_packages
+end
 
+def install_homebrew
+  puts "======================================================"
+  puts "Installing Homebrew, the OSX package manager...If it's"
+  puts "already installed, this will do nothing."
+  puts "======================================================"
+  run %{bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"}
   puts
+end
+
+def update_homebrew_registry
   puts
   puts "======================================================"
   puts "Updating Homebrew."
   puts "======================================================"
   run %{brew update}
   puts
+end
+
+def install_homebrew_packages
   puts
   puts "======================================================"
   puts "Installing Homebrew packages...There may be some warnings."
   puts "======================================================"
-  run %{brew install zsh ctags git tmux reattach-to-user-namespace the_silver_searcher ghi}
+  run %{brew bundle --file=$HOME/.yadr/Brewfile}
   puts
   puts
 end
@@ -192,7 +207,7 @@ def install_fonts
   puts "======================================================"
   puts "Installing patched fonts for Powerline/Lightline."
   puts "======================================================"
-  run %{ cp -f $HOME/.yadr/fonts/* $HOME/Library/Fonts } if RUBY_PLATFORM.downcase.include?("darwin")
+  run %{ cp -f $HOME/.yadr/fonts/* $HOME/Library/Fonts } if on_a_mac?
   run %{ mkdir -p ~/.fonts && cp ~/.yadr/fonts/* ~/.fonts && fc-cache -vf ~/.fonts } if RUBY_PLATFORM.downcase.include?("linux")
   puts
 end
