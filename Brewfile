@@ -49,6 +49,9 @@ brew 'python'
 # manage language versions
 brew 'asdf'
 
+# compile many things
+brew 'llvm'
+
 # install some Apps
 cask 'notion'
 cask 'vlc'

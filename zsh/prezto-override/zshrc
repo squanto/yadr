@@ -1,3 +1,8 @@
 source $HOME/.zprezto/runcoms/zshrc
 
 for config_file ($HOME/.yadr/zsh/*.zsh) source $config_file
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# TODO: this should go somewhere else
+export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="/usr/local/opt/llvm/bin:$PATH"
