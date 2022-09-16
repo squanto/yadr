@@ -26,7 +26,7 @@
   recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
 
   # branch
-  b = branch -v                     # branch (verbose)
+  br = branch
 
   # commit
   c = commit -m                     # commit with message
@@ -37,7 +37,6 @@
 
   # checkout
   co = checkout                     # checkout
-  nb = checkout -b                  # create and switch to a new branch (mnemonic: "git new branch branchname...")
 
   # cherry-pick
   cp = cherry-pick -x               # grab a change from a branch

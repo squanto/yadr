@@ -6,3 +6,5 @@ for config_file ($HOME/.yadr/zsh/*.zsh) source $config_file
 # TODO: this should go somewhere else
 export PATH="$PATH:$HOME/.rvm/bin"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
+export PATH=/usr/local/bin:$PATH
+export PATH=/opt/homebrew/bin:$PATH
